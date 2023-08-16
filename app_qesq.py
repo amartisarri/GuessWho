@@ -29,7 +29,7 @@ st.set_page_config(
     
     
 ## --------------- CACHE FUCTION ---------------
-@st.cache(ttl=12*3600)
+## @st.cache(ttl=12*3600)
 def CLIP_Loading():
 	  return clip.load("ViT-B/32", device="cpu", jit=False)
 
@@ -720,6 +720,7 @@ def Load_Data(N):
         'previous_zip_file':'guess_who_images.zip',
         'special_images_names':False,
         'images_not_selected':True,
+        'images_loaded':False,
         'token_type':0,
         'feature_questions':['Are you a MAN?', 'Are you a WOMAN?', 'Are you an ATTRACTIVE person?', 'Are you an CHUBBY person?', 'Are you YOUNG?',
                     'Are you a person with RECEDING HAIRLINES?', 'Are you SMILING?','Are you BALD?', 
@@ -816,6 +817,7 @@ def ReLoad_Data(list_images_source):
     # st.session_state['init_data']['previous_zip_file']='guess_who_images.zip'
     # st.session_state['init_data']['special_images_names']=False
     st.session_state['init_data']['images_not_selected']=True
+    st.session_state['init_data']['images_loaded']=False
     # st.session_state['init_data']['token_type']=0
     # st.session_state['init_data']['feature_questions']=['Are you a MAN?', 'Are you a WOMAN?', 'Are you an ATTRACTIVE person?', 'Are you an CHUBBY person?', 'Are you YOUNG?',
     #                 'Are you a person with RECEDING HAIRLINES?', 'Are you SMILING?','Are you BALD?', 
@@ -874,8 +876,8 @@ def ReLoad_Data(list_images_source):
     # st.session_state['init_data']['user_input_querys1']='A picture of a person'
     # st.session_state['init_data']['user_input_querys2']='A picture of a person'
     st.session_state['init_data']['image_current_probs']=np.zeros((st.session_state['init_data']['N_images'],2))
-    st.session_state['init_data']['selected_winner']='Winner not selected'
-    st.session_state['init_data']['selected_winner2']='Winner not selected'
+    st.session_state['init_data']['selected_winner']='Winner '
+    st.session_state['init_data']['selected_winner2']='Winner '
     st.session_state['init_data']['reset_app']=False
     st.session_state['init_data']['change_player']=False
     st.session_state['init_data']['player2_turn']=False
@@ -899,7 +901,7 @@ def ReLoad_Data(list_images_source):
 
 ## --------------- MAIN FUCTION ---------------
 def Main_Program():
-
+	
     ## --------------- LOAD DATA ---------------
     if 'init_data' not in st.session_state:
         Load_Data(20)
@@ -1240,7 +1242,8 @@ def Main_Program():
         Text_Finished_Game_9="Triar una pregunta d'una llista, crear la teva consulta en anglès o selecciona directament un guanyador:"
 
 
-        Tex_Images_Source_1="Tria entre: imatges de famosos, imatges del joc original 'Quí és Quí?', imatges d'amcs o les imatges que vulguis (proporcionant un arxiu '.zip')"
+        Tex_Images_Source_1="Tria entre: imatges de famosos, imatges del joc original 'Quí és Quí?' o les imatges que vulguis (proporcionant un arxiu '.zip')"
+        ## Tex_Images_Source_1="Tria entre: imatges de famosos, imatges del joc original 'Quí és Quí?', imatges d'amics o les imatges que vulguis (proporcionant un arxiu '.zip')"
 
 
         Text_Show_Elements_1="<h3 style='text-align:left; float:left; color:gray; margin-left:0px; margin-right:0px; margin-top:15px; margin-bottom:-10px;'>"
@@ -1626,15 +1629,16 @@ def Main_Program():
                 st.session_state['init_data']['zip_file']='guess_who_images.zip'
             elif st.session_state['init_data']['Selected_Images_Source']==List_Images_Source[1]:
                 st.session_state['init_data']['zip_file']='Original.zip'
-            elif st.session_state['init_data']['Selected_Images_Source']==List_Images_Source[2]:
-                st.session_state['init_data']['zip_file']='frifam.zip'
+            ## elif st.session_state['init_data']['Selected_Images_Source']==List_Images_Source[2]:
+                ## st.session_state['init_data']['zip_file']='frifam.zip'
             else:
                 st.session_state['init_data']['zip_file']='Use images from specific path'
             
 
     ## --------------- IMAGE SELECTION ---------------
     if st.session_state['init_data']['status']==1 or st.session_state['init_data']['status']==101:
-        if st.session_state['init_data']['Selected_Images_Source']==List_Images_Source[3]:
+        if st.session_state['init_data']['Selected_Images_Source']==List_Images_Source[2]:
+        ## if st.session_state['init_data']['Selected_Images_Source']==List_Images_Source[3]:
             ## Specific source text
             st.markdown(Text_Language_1, unsafe_allow_html=True)
                 
@@ -1643,8 +1647,8 @@ def Main_Program():
             if Uploaded_File is not None:
                 if Uploaded_File!=st.session_state['init_data']['zip_file']:            
                     st.session_state['init_data']['zip_file']= Uploaded_File
+                    st.session_state['init_data']['images_loaded']=True
                     Select_Images_Randomly()
-                
                 
                 if Uploaded_File==st.session_state['init_data']['zip_file']:  
                     ## Button - randomly change Celeba images
@@ -1661,9 +1665,9 @@ def Main_Program():
                         st.session_state['init_data']['status']=st.session_state['init_data']['status']+10
                         
         else:
-        
+            st.session_state['init_data']['images_loaded']=True
             ## Button - randomly change images
-            st.markdown(Text_Image_Selection_1, unsafe_allow_html=True)                   
+            st.markdown(Text_Image_Selection_1, unsafe_allow_html=True)
             Random_Images = st.button(Text_Image_Selection_2, key='Random_Images')
             if st.session_state['init_data']['images_not_selected'] or Random_Images:
                 Select_Images_Randomly()
@@ -1702,7 +1706,7 @@ def Main_Program():
             Player_2_Image=st.selectbox(Text_Select_Winner_3, Image_Names_List, index=0, key='Player_2_Image', help=None)    
                                
             ## Button - start game
-            if Player_2_Image!='Not selected':
+            if Player_2_Image!=Text_Select_Winner_2:
                 st.markdown(Text_Select_Winner_4+Player_2_Image+Text_Show_Elements_5, unsafe_allow_html=True)
                 Next_Player_Selection = st.button(Text_Select_Winner_6, key='Next_Player_Selection')
                 if Next_Player_Selection:
@@ -1759,26 +1763,26 @@ def Main_Program():
     if st.session_state['init_data']['status']==132:    
         Ask_Question(Text_Ask_Question_2, st.session_state['init_data']['current_winner_index2'], st.session_state['init_data']['award2'],List_Query_Type,List_Images_Source,Text_Show_Elements_1, Text_Show_Elements_2,Text_Show_Elements_3,Text_Show_Elements_4,Text_Show_Elements_5,Text_Show_Elements_6,Text_Show_Elements_8,Text_Show_Elements_9,Text_Show_Elements_11,Text_Show_Elements_13,Text_Show_Elements_14,Text_Show_Elements_15,Text_Show_Elements_17,Text_Show_Elements_18,Text_Show_Elements_19,Text_Show_Elements_21,Text_Show_Elements_22,Text_Show_Elements_24,Text_Show_Elements_26,Text_Show_Elements_28,Text_Show_Elements_29,Text_Show_Elements_31,Text_Show_Elements_36,Text_Show_Elements_38,Text_Finished_Game_1,Text_Finished_Game_2,Text_Finished_Game_3,Text_Finished_Game_4,Text_Finished_Game_7,Text_Finished_Game_8,Text_Finished_Game_9,Text_Show_Results_1,Text_Show_Results_2,Text_Show_Results_4,Text_Show_Results_6,Text_Show_Results_8,Text_Show_Results_9,Text_Show_Results_13)
 
-
+	
 	    ## --------------- CALCULATE RESULTS ---------------
     if not st.session_state['init_data']['finished_game']:
     
         ## CREATE IMAGES TO SHOW
-        if st.session_state['init_data']['status']>0:
+        if st.session_state['init_data']['status']>0 and st.session_state['init_data']['images_loaded']:
+	## and ((st.session_state['init_data']['status']!=0 and st.session_state['init_data']['status']!=1 and st.session_state['init_data']['status']!=101) or st.session_state['init_data']['Selected_Images_Source']!=List_Images_Source[2]):
+        ## if st.session_state['init_data']['status']>0:
             [st.session_state['init_data']['show_images'], st.session_state['init_data']['Showed_image_names']]=Show_images()        
-
 
         ## DISCARDING IMAGES AND FINAL RESULTS
         if st.session_state['init_data']['player2_turn']:
             st.session_state['init_data']['award2']=Final_Results(st.session_state['init_data']['n_images2'], st.session_state['init_data']['award2'], Text_Calculate_Results_1, st.session_state['init_data']['current_winner_index2'],st.session_state['init_data']['current_image_names2'],st.session_state['init_data']['current_images_discarted2'],Text_Show_Final_Results_1,Text_Show_Final_Results_2,Text_Show_Final_Results_3,Text_Show_Final_Results_4) 
-
         else:
-            if st.session_state['init_data']['N_players']>1:
-               st.session_state['init_data']['award1']=Final_Results(st.session_state['init_data']['n_images'], st.session_state['init_data']['award1'], Text_Calculate_Results_1, st.session_state['init_data']['current_winner_index'],st.session_state['init_data']['current_image_names'],st.session_state['init_data']['current_images_discarted'],Text_Show_Final_Results_1,Text_Show_Final_Results_2,Text_Show_Final_Results_3,Text_Show_Final_Results_4) 
-            else:
-               st.session_state['init_data']['award1']=Final_Results(st.session_state['init_data']['n_images'], st.session_state['init_data']['award1'], Text_Ask_Question_0, st.session_state['init_data']['current_winner_index'],st.session_state['init_data']['current_image_names'],st.session_state['init_data']['current_images_discarted'],Text_Show_Final_Results_1,Text_Show_Final_Results_2,Text_Show_Final_Results_3,Text_Show_Final_Results_4) 
-                
-          
+            if st.session_state['init_data']['N_players']>1:      
+                st.session_state['init_data']['award1']=Final_Results(st.session_state['init_data']['n_images'], st.session_state['init_data']['award1'], Text_Calculate_Results_1, st.session_state['init_data']['current_winner_index'],st.session_state['init_data']['current_image_names'],st.session_state['init_data']['current_images_discarted'],Text_Show_Final_Results_1,Text_Show_Final_Results_2,Text_Show_Final_Results_3,Text_Show_Final_Results_4)
+            else:      
+                st.session_state['init_data']['award1']=Final_Results(st.session_state['init_data']['n_images'], st.session_state['init_data']['award1'], Text_Calculate_Results_1, st.session_state['init_data']['current_winner_index'],st.session_state['init_data']['current_image_names'],st.session_state['init_data']['current_images_discarted'],Text_Show_Final_Results_1,Text_Show_Final_Results_2,Text_Show_Final_Results_3,Text_Show_Final_Results_4)
+
+	    
         ## BUTTON NEXT
         if st.session_state['init_data']['show_results'] and (not st.session_state['init_data']['finished_game']):
             if st.session_state['init_data']['N_players']>1:
@@ -1789,8 +1793,11 @@ def Main_Program():
             
             
         ## SHOW CURRENT IMAGES
-        if st.session_state['init_data']['status']>0:
+        if st.session_state['init_data']['status']>0 and st.session_state['init_data']['images_loaded']:
+	## and ((st.session_state['init_data']['status']!=0 and st.session_state['init_data']['status']!=1 and st.session_state['init_data']['status']!=) or st.session_state['init_data']['Selected_Images_Source']!=List_Images_Source[2]):
+        ## if st.session_state['init_data']['status']>0:
             st.image(st.session_state['init_data']['show_images'], use_column_width=False, caption=st.session_state['init_data']['Showed_image_names'])        
+		
 
 
     ## --------------- RELOAD GAME ---------------
