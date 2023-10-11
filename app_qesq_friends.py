@@ -1405,9 +1405,9 @@ def Main_Program():
         Text_Ask_Question_1="JUGADOR 1: "
 
         Text_Ask_Question_2="JUGADOR 2: "
-            
+
         Text_Calculate_Results_1="JUGADOR 1"
-	    
+
         Text_Calculate_Results_2="JUGADOR 2"
 
         Text_Calculate_Results_3='SEGÜENT JUGADOR'
