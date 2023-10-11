@@ -1105,8 +1105,8 @@ def Main_Program():
         Text_Ask_Question_2="PLAYER 2: "
 
         Text_Calculate_Results_1="PLAYER 1"
-	    
-	Text_Calculate_Results_2="PLAYER 2"
+
+        Text_Calculate_Results_2="PLAYER 2"
 
         Text_Calculate_Results_3='NEXT PLAYER'
 
