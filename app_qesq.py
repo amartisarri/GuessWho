@@ -1798,7 +1798,7 @@ def Main_Program():
         if st.session_state['init_data']['status']>0 and st.session_state['init_data']['images_loaded']:
 	## and ((st.session_state['init_data']['status']!=0 and st.session_state['init_data']['status']!=1 and st.session_state['init_data']['status']!=) or st.session_state['init_data']['Selected_Images_Source']!=List_Images_Source[2]):
         ## if st.session_state['init_data']['status']>0:
-            st.image(st.session_state['init_data']['show_images'], use_column_width=False, caption=st.session_state['init_data']['Showed_image_names'])        
+            st.image(st.session_state['init_data']['show_images'], use_container_width=False, caption=st.session_state['init_data']['Showed_image_names'])        
 		
 
 
