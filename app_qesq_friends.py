@@ -1790,7 +1790,7 @@ def Main_Program():
             
         ## SHOW CURRENT IMAGES
         if st.session_state['init_data']['status']>0:
-            st.image(st.session_state['init_data']['show_images'], use_column_width=False, caption=st.session_state['init_data']['Showed_image_names'])        
+            st.image(st.session_state['init_data']['show_images'], use_container_width=False, caption=st.session_state['init_data']['Showed_image_names'])        
 
 
     ## --------------- RELOAD GAME ---------------
