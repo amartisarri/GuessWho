@@ -7,8 +7,9 @@ pip==22.2.2
 # torch==1.11.0+cpu
 # torch==1.9.0+cpu
 
---extra-index-url https://pytorch.org
-torch==2.3.1+cpu
+# --extra-index-url https://pytorch.org
+# torch==2.3.1+cpu
+torch
 
 torchvision==0.10.0+cpu
 # torchvision
