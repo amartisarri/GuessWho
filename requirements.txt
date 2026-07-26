@@ -5,6 +5,10 @@ tqdm
 pip==22.2.2
 --find-links https://download.pytorch.org/whl/torch_stable.html
 # torch==1.11.0+cpu
-torch==1.9.0+cpu
+# torch==1.9.0+cpu
+
+--extra-index-url https://pytorch.org
+torch==2.3.1+cpu
+
 torchvision==0.10.0+cpu
 # torchvision
