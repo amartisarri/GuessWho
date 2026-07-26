@@ -2,9 +2,9 @@ ftfy
 regex
 numpy<2.0
 tqdm
-# pip==22.2.2
+pip==22.2.2
 --find-links https://download.pytorch.org/whl/torch_stable.html
-torch==1.11.0+cpu
-# torch==1.9.0+cpu
-# torchvision==0.10.0+cpu
-torchvision
+# torch==1.11.0+cpu
+torch==1.9.0+cpu
+torchvision==0.10.0+cpu
+# torchvision
